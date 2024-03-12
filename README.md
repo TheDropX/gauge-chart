@@ -1,8 +1,6 @@
 # Gauge Chart
 
-**A library for creating nice and flexible gauge charts.**
-
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/greetclock/gauge-chart/Test%20Workflow?style=flat-square) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+**A library for creating nice and flexible gauge charts with tooltips.**
 
 ## [Demo](https://greetclock.github.io/gauge-chart/examples/samples/)
 
@@ -81,6 +79,8 @@ Feel free to change or delete any of the gaugeOptions properties as long as thei
 | rangeLabel        | array of two strings                                                             | depicts gauge ranges on both sides of the chart      |
 | centralLabel      | string                                                                           | depicts gauge inner label                            |
 | labelsFont        | string                                                                           | specifies font-family to be used for labels          |
+| enableTooltips    | boolean                                                                          | enable/disable tooltips                              |
+| tooltipsLabels    | string[]                                                                         | tooltips to be displayed (<text>: calculated range)  |
 
 #### .gaugeChart( ... )
 
@@ -108,4 +108,4 @@ Build the library with `npm run build`. This will compile the `dist` files. To s
 
 ## Authors
 
-[Alexey Karpov](https://github.com/greetclock), [Maxim Maltsev](https://github.com/mmaltsev).
+[Alexey Karpov](https://github.com/greetclock), [Maxim Maltsev](https://github.com/mmaltsev), forked and modified by: [TheDropX](https://github.com/TheDropX)
