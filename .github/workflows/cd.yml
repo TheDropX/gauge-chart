@@ -6,7 +6,7 @@ on:
 jobs:
   cd:
     name: CD
-    needs: ci
+    needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: read
