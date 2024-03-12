@@ -68,15 +68,36 @@ export function rangeLabelNumberWarnChecker(rangeLabel: string[]) {
     )
 }
 
+export function tooltipsNumberChecker(
+  tooltipsEnabled: boolean,
+  tooltips: string[],
+  arcDelimiters: number[],
+) {
+  if (tooltipsEnabled) {
+    if (tooltips.length !== arcDelimiters.length + 1)
+      logger.warn(
+        'Gauge-chart Warning: number of tooltips is different than number of delimiters',
+      )
+  } else if (!tooltipsEnabled) {
+    if (tooltips.length > 0)
+      logger.warn(
+        'Gauge-chart Warning: tooltips are not enabled, but provided, therefore they will not be displayed',
+      )
+  }
+}
+
 export function warnChecker(
   chartDelimiters: number[],
   chartColors,
   rangeLabel: string[],
+  tooltipsEnabled: boolean,
+  tooltips: string[],
 ) {
   colorsLackWarnChecker(chartDelimiters, chartColors)
   colorsExcessWarnChecker(chartDelimiters, chartColors)
   // needleValueWarnChecker(needleValue)
   rangeLabelNumberWarnChecker(rangeLabel)
+  tooltipsNumberChecker(tooltipsEnabled, tooltips, chartDelimiters)
 }
 
 export function errorChecker(chartDelimiters: number[]) {
@@ -98,7 +119,15 @@ export function paramChecker(
   chartDelimiters: number[],
   chartColors: string[],
   rangeLabel: string[],
+  tooltipsEnabled: boolean,
+  tooltips: string[],
 ) {
-  warnChecker(chartDelimiters, chartColors, rangeLabel)
+  warnChecker(
+    chartDelimiters,
+    chartColors,
+    rangeLabel,
+    tooltipsEnabled,
+    tooltips,
+  )
   return errorChecker(chartDelimiters)
 }
