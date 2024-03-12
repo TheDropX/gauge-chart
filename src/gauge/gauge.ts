@@ -69,7 +69,43 @@ export function arcOutline(
   arcLabels: string[],
   arcLabelFontSize: number,
   labelsFont: string,
+  element: Element,
+  rangeLabel: string[],
+  enableTooltips: boolean,
+  tooltipLabels: string[],
 ) {
+  let x = 0
+  let y = 0
+
+  const rangeValues = []
+
+  for (let i = 0; i <= arcDelimiters.length; i++) {
+    if (i === 0)
+      rangeValues.push(
+        `0 - ${(
+          Number.parseInt(rangeLabel[1]) *
+          (arcDelimiters[i] / 100)
+        ).toFixed(0)}`,
+      )
+    else if (i === arcDelimiters.length)
+      rangeValues.push(
+        `${(
+          Number.parseInt(rangeLabel[1]) *
+          (arcDelimiters[i - 1] / 100)
+        ).toFixed(0)} - ${rangeLabel[1]}`,
+      )
+    else
+      rangeValues.push(
+        `${(
+          Number.parseInt(rangeLabel[1]) *
+          (arcDelimiters[i - 1] / 100)
+        ).toFixed(0)} - ${(
+          Number.parseInt(rangeLabel[1]) *
+          (arcDelimiters[i] / 100)
+        ).toFixed(0)}`,
+      )
+  }
+
   arcColors.forEach((color, i) => {
     const startAngle = perc2RadWithShift(i ? arcDelimiters[i - 1] : 0)
     const endAngle = perc2RadWithShift(arcDelimiters[i] || 100) // 100 for last arc slice
@@ -92,6 +128,44 @@ export function arcOutline(
           (chartHeight + offset) +
           ')',
       )
+
+    const tooltip = document.createElement('div')
+    const colorCirle = document.createElement('div')
+    const text = document.createElement('p')
+
+    const mouseMoveFn = (e: MouseEvent) => {
+      x = e.clientX
+      y = e.clientY
+
+      tooltip.style.top = y + 2 + 'px'
+      tooltip.style.left = x + 2 + 'px'
+
+      element.appendChild(tooltip)
+    }
+
+    tooltip.style.position = 'fixed'
+    tooltip.style.backgroundColor = '#fff'
+    tooltip.style.display = 'flex'
+    tooltip.style.alignItems = 'center'
+    tooltip.style.boxShadow =
+      '0 0 2px 2px rgba(170, 170, 170, 0.5), 0 2px 4px 0 rgba(170, 170, 170, 0.5)'
+    tooltip.style.borderRadius = '5px'
+    tooltip.style.padding = '0 0.6em'
+    tooltip.style.fontFamily = 'Ubuntu, sans-serif !important'
+    tooltip.style.fontSize = '0.9em'
+    tooltip.style.lineHeight = '0.4'
+
+    colorCirle.style.width = '10px'
+    colorCirle.style.height = '10px'
+    colorCirle.style.backgroundColor = color
+    colorCirle.style.borderRadius = '50%'
+    colorCirle.style.marginRight = '0.5em'
+
+    text.style.color = '#666'
+    text.textContent = `${tooltipLabels[i]}: ${rangeValues[i]}`
+
+    tooltip.appendChild(colorCirle)
+    tooltip.appendChild(text)
 
     if (arcOverEffect) {
       gaugeArc = arc()
@@ -122,6 +196,8 @@ export function arcOutline(
             .duration(50)
             .ease(easeLinear)
             .attr('fill', color)
+
+          if (enableTooltips) element.addEventListener('mousemove', mouseMoveFn)
         })
         .on('mouseout', () => {
           innerArc.style('opacity', 1)
@@ -130,7 +206,22 @@ export function arcOutline(
             .duration(300)
             .ease(easeLinear)
             .attr('fill', 'transparent')
+
+          if (enableTooltips) {
+            element.removeEventListener('mousemove', mouseMoveFn)
+            element.removeChild(tooltip)
+          }
         })
+    } else {
+      if (enableTooltips)
+        innerArc
+          .on('mouseover', () => {
+            element.addEventListener('mousemove', mouseMoveFn)
+          })
+          .on('mouseout', () => {
+            element.removeChild(tooltip)
+            element.removeEventListener('mousemove', mouseMoveFn)
+          })
     }
   })
 
@@ -370,6 +461,20 @@ export interface GaugeOptions {
   arcRatios?: number[]
   rangeLabel?: string[]
   centralLabel?: string
+  hasNeedle?: boolean
+  outerNeedle?: boolean
+  needleUpdateSpeed?: number
+  arcOverEffect?: boolean
+  arcLabels?: string[]
+  arcLabelFontSize?: number
+  rangeLabelFontSize?: number
+  labelsFont?: string
+  needleStartValue?: number
+  arcPadding?: number
+  arcPaddingColor?: string
+  arcDelimiters?: number[]
+  enableTooltips?: boolean
+  tooltipLabels?: string[]
 }
 
 /**
@@ -383,7 +488,7 @@ export function gaugeChart(
   areaWidth: number,
   gaugeOptions: GaugeOptions,
 ): GaugeInterface {
-  const defaultGaugeOption = {
+  const defaultGaugeOption: GaugeOptions = {
     hasNeedle: false,
     outerNeedle: false,
     needleColor: 'gray',
@@ -400,6 +505,8 @@ export function gaugeChart(
     centralLabel: '',
     rangeLabelFontSize: undefined,
     labelsFont: 'Roboto,Helvetica Neue,sans-serif',
+    enableTooltips: false,
+    tooltipLabels: [],
   }
 
   let {
@@ -419,8 +526,18 @@ export function gaugeChart(
     labelsFont,
     outerNeedle,
     needleStartValue,
+    enableTooltips,
+    tooltipLabels,
   } = (Object as any).assign(defaultGaugeOption, gaugeOptions)
-  if (!paramChecker(arcDelimiters, arcColors, rangeLabel)) {
+  if (
+    !paramChecker(
+      arcDelimiters,
+      arcColors,
+      rangeLabel,
+      enableTooltips,
+      tooltipLabels,
+    )
+  ) {
     return
   }
 
@@ -448,6 +565,10 @@ export function gaugeChart(
     arcLabels,
     arcLabelFontSize,
     labelsFont,
+    element,
+    rangeLabel,
+    enableTooltips,
+    tooltipLabels,
   )
 
   let needle = null

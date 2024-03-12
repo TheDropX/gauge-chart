@@ -6,22 +6,29 @@ const gaugeOptions = {
   // needle options
   hasNeedle: true,
   outerNeedle: false,
-  needleColor: 'gray',
+  needleColor: 'black',
   needleStartValue: 10,
   needleUpdateSpeed: 1000,
   // arc options
   arcColors: [],
   arcDelimiters: [10, 60, 90],
-  arcPadding: 6,
+  arcPadding: 3,
   arcPaddingColor: 'white',
-  arcLabels: ['35', '210', '315'],
+  arcColors: ['#FF4560', '#FEB019', '#00E396'],
   arcLabelFontSize: false,
   // arcOverEffect: false,
   // label options
   rangeLabel: ['0', '350'],
   centralLabel: '175',
   rangeLabelFontSize: false,
-  labelsFont: 'Consolas',
+  // labelsFont: 'Consolas',
+  enableTooltips: true,
+  tooltipLabels: [
+    'Beneden gemiddelde',
+    'Gemiddeld',
+    'Boven gemiddelde',
+    'Boven max gemiddeelde',
+  ],
 }
 
 gaugeChart(element, 400, gaugeOptions).updateNeedle(50)
