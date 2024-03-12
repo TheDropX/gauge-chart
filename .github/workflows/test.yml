@@ -3,11 +3,7 @@
 
 name: Test Workflow
 
-on:
-  push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
+on: [workflow_call]
 
 jobs:
   test:
