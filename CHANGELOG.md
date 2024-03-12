@@ -1,3 +1,7 @@
+## 1.0.0
+
+- Added tooltips
+
 ## 0.5.3
 
 - Don't format `bundle.js` with prettier.
