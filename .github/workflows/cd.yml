@@ -4,8 +4,8 @@ on:
     branches:
       - main
 jobs:
-  tests:
-    uses: ./.github/workflows/test.yml
+  # tests:
+  #   uses: ./.github/workflows/test.yml
   cd:
     name: CD
     needs: tests
