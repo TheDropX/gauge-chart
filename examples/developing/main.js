@@ -31,4 +31,4 @@ const gaugeOptions = {
   ],
 }
 
-gaugeChart(element, 400, gaugeOptions).updateNeedle(50)
+gaugeChart(element, 225, gaugeOptions).updateNeedle(50)

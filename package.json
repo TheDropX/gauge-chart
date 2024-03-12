@@ -1,13 +1,13 @@
 {
   "name": "gauge-chart-tooltips",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "**A library for creating nice and flexible gauge charts.**",
   "main": "dist/commonjs-bundle.js",
   "author": "",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TheDropX/gauge-chart"
+    "url": "https://github.com/TheDropX/gauge-chart-tooltips"
   },
   "scripts": {
     "test": "jest",

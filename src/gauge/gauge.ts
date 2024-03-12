@@ -132,6 +132,7 @@ export function arcOutline(
     const tooltip = document.createElement('div')
     const colorCirle = document.createElement('div')
     const text = document.createElement('p')
+    const span = document.createElement('span')
 
     const mouseMoveFn = (e: MouseEvent) => {
       x = e.clientX
@@ -150,22 +151,34 @@ export function arcOutline(
     tooltip.style.boxShadow =
       '0 0 2px 2px rgba(170, 170, 170, 0.5), 0 2px 4px 0 rgba(170, 170, 170, 0.5)'
     tooltip.style.borderRadius = '5px'
-    tooltip.style.padding = '0 0.6em'
+    tooltip.style.padding = '0.7em 1em'
     tooltip.style.fontFamily = 'Ubuntu, sans-serif !important'
     tooltip.style.fontSize = '0.9em'
-    tooltip.style.lineHeight = '0.4'
+    tooltip.style.zIndex = '999'
 
-    colorCirle.style.width = '10px'
-    colorCirle.style.height = '10px'
+    colorCirle.style.width = '12px'
+    colorCirle.style.height = '12px'
     colorCirle.style.backgroundColor = color
     colorCirle.style.borderRadius = '50%'
-    colorCirle.style.marginRight = '0.5em'
+    colorCirle.style.marginRight = '0.7em'
 
     text.style.color = '#666'
-    text.textContent = `${tooltipLabels[i]}: ${rangeValues[i]}`
+    text.style.margin = '0'
+    text.style.padding = '0'
+    text.style.fontFamily = 'Ubuntu, sans-serif !important'
+    text.style.fontWeight = '400'
+    text.textContent = `${tooltipLabels[i]}: `
+
+    span.style.color = '#666'
+    span.style.margin = '0'
+    span.style.marginLeft = '0.5em'
+    span.style.padding = '0'
+    span.style.fontWeight = '700'
+    span.textContent = rangeValues[i]
 
     tooltip.appendChild(colorCirle)
     tooltip.appendChild(text)
+    tooltip.appendChild(span)
 
     if (arcOverEffect) {
       gaugeArc = arc()
@@ -197,7 +210,8 @@ export function arcOutline(
             .ease(easeLinear)
             .attr('fill', color)
 
-          if (enableTooltips) element.addEventListener('mousemove', mouseMoveFn)
+          if (enableTooltips && tooltipLabels[i])
+            element.addEventListener('mousemove', mouseMoveFn)
         })
         .on('mouseout', () => {
           innerArc.style('opacity', 1)
@@ -207,13 +221,13 @@ export function arcOutline(
             .ease(easeLinear)
             .attr('fill', 'transparent')
 
-          if (enableTooltips) {
+          if (enableTooltips && tooltipLabels[i]) {
             element.removeEventListener('mousemove', mouseMoveFn)
             element.removeChild(tooltip)
           }
         })
     } else {
-      if (enableTooltips)
+      if (enableTooltips && tooltipLabels[i])
         innerArc
           .on('mouseover', () => {
             element.addEventListener('mousemove', mouseMoveFn)

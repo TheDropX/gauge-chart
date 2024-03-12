@@ -1,3 +1,8 @@
+## 1.0.1
+
+- Bug fixes (tooltips showing undefined instead of hiding)
+- Style changes
+
 ## 1.0.0
 
 - Added tooltips
