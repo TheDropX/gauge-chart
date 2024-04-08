@@ -1,3 +1,8 @@
+## 1.0.2
+
+- Add tooltip for centralLabel
+- centralLabel is now bolded
+
 ## 1.0.1
 
 - Bug fixes (tooltips showing undefined instead of hiding)

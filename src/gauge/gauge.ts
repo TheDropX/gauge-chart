@@ -404,6 +404,8 @@ export function needleOutline(
  * @param outerRadius - outer radius of gauge.
  * @param rangeLabel - range labels of gauge.
  * @param centralLabel - value of the central label.
+ * @param elementId - id of the element.
+ * @param tooltipsEnabled - boolean value that determines whether tooltips are enabled.
  * @returns modified svg.
  */
 export function labelOutline(
@@ -416,6 +418,8 @@ export function labelOutline(
   centralLabel: string,
   rangeLabelFontSize: number,
   labelsFont: string,
+  elementId: string,
+  enableTooltips: boolean,
 ) {
   const arcWidth = chartHeight - outerRadius
 
@@ -466,6 +470,66 @@ export function labelOutline(
     .text(centralLabel)
     .attr('font-size', centralLabelFontSize + 'px')
     .attr('font-family', labelsFont)
+    .attr('font-weight', 'bold')
+    .attr('id', elementId + 'CentralLabel')
+
+  let x = 0
+  let y = 0
+
+  const element = document.getElementById(elementId + 'CentralLabel')
+  const tooltip = document.createElement('div')
+  const text = document.createElement('p')
+  const span = document.createElement('span')
+
+  const mouseMoveFn = (e: MouseEvent) => {
+    x = e.clientX
+    y = e.clientY
+
+    tooltip.style.top = y + 2 + 'px'
+    tooltip.style.left = x + 2 + 'px'
+
+    document.body.appendChild(tooltip)
+  }
+
+  tooltip.style.position = 'fixed'
+  tooltip.style.backgroundColor = '#fff'
+  tooltip.style.display = 'flex'
+  tooltip.style.alignItems = 'center'
+  tooltip.style.boxShadow =
+    '0 0 2px 2px rgba(170, 170, 170, 0.5), 0 2px 4px 0 rgba(170, 170, 170, 0.5)'
+  tooltip.style.borderRadius = '5px'
+  tooltip.style.padding = '0.7em 1em'
+  tooltip.style.fontFamily = 'Ubuntu, sans-serif !important'
+  tooltip.style.fontSize = '0.9em'
+  tooltip.style.zIndex = '999'
+
+  text.style.color = '#666'
+  text.style.margin = '0'
+  text.style.padding = '0'
+  text.style.fontFamily = 'Ubuntu, sans-serif !important'
+  text.style.fontWeight = '400'
+  text.textContent = `Value: `
+
+  span.style.color = '#666'
+  span.style.margin = '0'
+  span.style.marginLeft = '0.5em'
+  span.style.padding = '0'
+  span.style.fontWeight = '700'
+  span.textContent = centralLabel
+
+  tooltip.appendChild(text)
+  tooltip.appendChild(span)
+
+  element.addEventListener('mouseover', () => {
+    if (enableTooltips) element.addEventListener('mousemove', mouseMoveFn)
+  })
+
+  element.addEventListener('mouseout', () => {
+    if (enableTooltips) {
+      element.removeEventListener('mousemove', mouseMoveFn)
+      document.body.removeChild(tooltip)
+    }
+  })
 }
 
 export interface GaugeOptions {
@@ -617,6 +681,8 @@ export function gaugeChart(
     centralLabel,
     rangeLabelFontSize,
     labelsFont,
+    element.id,
+    enableTooltips,
   )
 
   return new Gauge(svg, needleUpdateSpeed, needle)
