@@ -423,6 +423,8 @@ describe('label outlining', () => {
       centralLabel,
       rangeLabelFontSize,
       'sans-serif',
+      element.id,
+      false,
     )
     expect(svg).not.toBe(null)
     expect(svg.html().match(/text/g).length / 2).toBe(3)
@@ -447,6 +449,8 @@ describe('label outlining', () => {
       centralLabel,
       rangeLabelFontSize,
       'sans-serif',
+      element.id,
+      false,
     )
 
     const svgHtml = svg.html().split('</text>')
@@ -483,6 +487,8 @@ describe('label outlining', () => {
       centralLabel,
       rangeLabelFontSize,
       'sans-serif',
+      element.id,
+      false,
     )
 
     const svgHtml = svg.html().split('</text>')
@@ -521,6 +527,8 @@ describe('label outlining', () => {
       centralLabel,
       rangeLabelFontSize,
       'sans-serif',
+      element.id,
+      false,
     )
 
     const svgHtml = svg.html().split('</text>')
